@@ -102,6 +102,7 @@ const Portfolio = () => {
             <h2 className="font-light text-lg">
               All the above sites are built from scratch in the following stack:
             </h2>
+            <TechItem item="Wordpress" />
             <TechItem item="React Js" />
             <TechItem item="Node Js" />
             <TechItem item="Tailwind CSS" />
