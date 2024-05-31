@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useInView } from "react-intersection-observer";
 import PortfolioCard from "./PortfolioCard";
 import TechItem from "./TechItem";
@@ -15,11 +15,26 @@ import pmc from "../img/pmc.webp";
 import my from "../img/my.png";
 import portfolioDoodle from "../img/portfolioDoodle.svg";
 import ctaDoodle2 from "../img/ctaDoodle2.svg";
+import axios from "axios";
 
 const Portfolio = () => {
+  const [userData, setUserData]=useState([]);
   const { ref: myRef, inView: myElementIsVisible } = useInView({
     triggerOnce: true,
   });
+  
+
+    const fetchAllUser=async()=>{
+        const res =await axios.get("https://portfolio-apis.up.railway.app/readalluser");
+        setUserData(res.data)
+        
+    }
+
+
+    useEffect(()=>{
+        fetchAllUser();
+
+    },[])
 
   return (
     <div id="showcase" className="py-12 text-secondary">
@@ -72,46 +87,15 @@ const Portfolio = () => {
           </div>
 
           <div className="space-y-20 lg:px-4">
-          <PortfolioCard
-              head="Crypto"
-              para="MDP's role is to implement the National Disability Insurance Scheme (NDIS), which will support a better life for thousands of Australians with a significant and permanent disability and their families and carers."
-              href="https://beachcat.site/crypto"
-              mockup={crypto}
-              build="Wordpress"
-            />
+          {userData.map((item,i)=>(
             <PortfolioCard
-              head="My Disability Partner"
-              para="MDP's role is to implement the National Disability Insurance Scheme (NDIS), which will support a better life for thousands of Australians with a significant and permanent disability and their families and carers."
-              href="http://mdpartner.com.au"
-              mockup={mdp}
-              build="Wordpress"
+              head={item.name}
+              para={item.desc}
+              href={item.link}
+              mockup={`https://portfolio-apis.up.railway.app/images/${item.photo}`}
+              build={item.tag}
             />
-            <PortfolioCard
-              head="Punjab Medicare"
-              para="Welcome to PMC healing through nature.
-              For a healthy mind and body, you can't overlook Ayurvedic Medicine. They have been in business for 60+ years."
-              href="http://punjabmedicare.com"
-              mockup={pmc}
-            />
-            <PortfolioCard
-              head="Zai Makeover Studio"
-              para="Get a classy look with Aishwarya from Zai, a portfolio/service website of an amazingly talented makeup artist."
-              href="http://zaimakeoverstudio.com"
-              mockup={zai}
-            />
-            <PortfolioCard
-              head="The Shades of Trades"
-              para="Get a head start in your trading career and learn a skill for a
-              lifetime with The Shades of Trades.A trading course website which simplifies trading with intrinsic concepts of price action techniques and procedures."
-              href="http://theshadesoftrades.co.in"
-              mockup={tsot}
-            />
-            <PortfolioCard
-              head="My Portfolio"
-              para="A freelance developer portfolio website for Md Shahin providing services like website development, UI design, content writing and more."
-              href="http://varunbhabhra.com"
-              mockup={my}
-            />
+          ))}
           </div>
 
           <div className="md:hidden sm:w-5/6 mx-auto md:mx-0">
